@@ -75,7 +75,8 @@ export function formatAmount(amount: number): string {
   return formatter.format(amount);
 }
 
-export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
+export const parseStringify = <T>(value: T): T =>
+  JSON.parse(JSON.stringify(value));
 
 export const removeSpecialCharacters = (value: string) => {
   return value.replace(/[^\w\s]/gi, "");
@@ -133,39 +134,29 @@ export function countTransactionCategories(
   transactions: Transaction[]
 ): CategoryCount[] {
   const categoryCounts: { [category: string]: number } = {};
-  let totalCount = 0;
 
-  // Iterate over each transaction
-  transactions &&
-    transactions.forEach((transaction) => {
-      // Extract the category from the transaction
-      const category = transaction.category;
+  // Iterate over each transaction and count categories
+  transactions.forEach((transaction) => {
+    const category = transaction.category;
 
-      // If the category exists in the categoryCounts object, increment its count
-      if (categoryCounts.hasOwnProperty(category)) {
-        categoryCounts[category]++;
-      } else {
-        // Otherwise, initialize the count to 1
-        categoryCounts[category] = 1;
-      }
+    // Increment count or initialize it
+    categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+  });
 
-      // Increment total count
-      totalCount++;
-    });
+  // Calculate total count
+  const totalCount = transactions.length;
 
-  // Convert the categoryCounts object to an array of objects
-  const aggregatedCategories: CategoryCount[] = Object.keys(categoryCounts).map(
-    (category) => ({
-      name: category,
-      count: categoryCounts[category],
-      totalCount,
-    })
-  );
+  // Convert categoryCounts to an array of objects
+  const aggregatedCategories: CategoryCount[] = Object.entries(
+    categoryCounts
+  ).map(([category, count]) => ({
+    name: category,
+    count,
+    totalCount,
+  }));
 
-  // Sort the aggregatedCategories array by count in descending order
-  aggregatedCategories.sort((a, b) => b.count - a.count);
-
-  return aggregatedCategories;
+  // Sort by count in descending order
+  return aggregatedCategories.sort((a, b) => b.count - a.count);
 }
 
 export function extractCustomerIdFromUrl(url: string) {
