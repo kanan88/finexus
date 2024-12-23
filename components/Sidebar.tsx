@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/icons/logo.svg";
-import { sidebarLinks } from "@/app/constants";
+import { sidebarLinks } from "@/constants";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
@@ -26,7 +26,7 @@ const Sidebar = ({ user }: SiderbarProps) => {
 
         {sidebarLinks.map((item) => {
           const isActive =
-            pathname === item.route || pathname.startsWith(`${item.route}`);
+            pathname === item.route || pathname.startsWith(`${item.route}/`);
 
           return (
             <Link
