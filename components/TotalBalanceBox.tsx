@@ -1,5 +1,3 @@
-import { formatAmount } from "@/app/lib/utils";
-import CountUp from "react-countup";
 import AnimatedCounter from "./AnimatedCounter";
 
 const TotalBalanceBox = ({
