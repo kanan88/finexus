@@ -11,14 +11,14 @@ const Home = () => {
       <div className="home-content">
         <HeaderBox
           type="greeting"
-          title="Welcome"
+          title="Welcome, "
           user={loggedIn?.firstName || "Guest"}
           subtext="Access and manage your account and transactions efficiently"
         />
         <TotalBalanceBox
           accounts={[]}
           totalBanks={1}
-          totalCurrentBalance={12525.35}
+          totalCurrentBalance={12500.0}
         />
       </div>
     </section>
