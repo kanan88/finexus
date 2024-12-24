@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { z } from "zod";
+import { set, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,11 @@ import logo from "@/public/icons/logo.svg";
 import CustomInput from "./CustomInput";
 import { Loader2 } from "lucide-react";
 import { authFormSchema } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { signIn, signUp } from "@/lib/actions/user.actions";
 
 const AuthForm = ({ type }: { type: string }) => {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,10 +30,29 @@ const AuthForm = ({ type }: { type: string }) => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    console.log(values);
-    setIsLoading(false);
+
+    try {
+      // Sign up with Appwrite & create plain token
+      if (type === "sign-up") {
+        const newUser = await signUp(data);
+        setUser(newUser);
+      }
+
+      if (type === "sign-in") {
+        const response = await signIn({
+          email: data.email,
+          password: data.password,
+        });
+
+        if (response) router.push("/");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
