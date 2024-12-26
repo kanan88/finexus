@@ -137,6 +137,7 @@ export function countTransactionCategories(
   let totalCount = 0;
 
   // Iterate over each transaction
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   transactions &&
     transactions.forEach((transaction) => {
       // Extract the category from the transaction
