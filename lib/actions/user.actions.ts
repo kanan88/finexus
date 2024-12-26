@@ -160,7 +160,7 @@ export const createLinkToken = async (user: User) => {
 
     return parseStringify({ linkToken: response.data.link_token });
   } catch (error) {
-    console.log("Error", error);
+    console.log(error);
   }
 };
 
